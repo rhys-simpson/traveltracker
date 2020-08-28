@@ -41,9 +41,14 @@ def get_places():
         parts = line.split(",")
         parts[2] = int(parts[2])
         places.append(parts)
-    places.sort()
+        places.sort(key=take_forth)
     in_file.close()
     return places
+
+
+def take_forth(elem):
+    """ """
+    return elem[3]
 
 
 def print_places(places):
@@ -51,12 +56,10 @@ def print_places(places):
     for places_data in places:
         if places_data[3] == "n":
             unvisited = "*"
-            print("{}{}. {} in {} priority {}".format(unvisited, 1, places_data[0], places_data[1], places_data[2]))
+            print("{:2}{}. {} in {} priority {}".format(unvisited, 1, *places_data[:-1]))
         else:
-            print("{}. {} in {} priority {}".format(1, places_data[0], places_data[1], places_data[2]))
-        # if places[3] == "n":
-            # unvisited += 1
-        # print("{} places. You still want to visit {} places.".format(len(list(places)), unvisited))
+            print("{:3}. {} in {} priority {}".format(1, *places_data[:-1]))
+    print("{} places. You still need to visit {} places.".format(len(list(places)), 1))
 
 
 if __name__ == '__main__':
