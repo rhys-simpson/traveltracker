@@ -27,12 +27,13 @@ def main():
             print("mark")
         else:
             print("Invalid Menu Choice")
-        # print(menu)
-        # choice = input(">>>").upper()
+        print(menu)
+        choice = input(">>>").upper()
     print("Have a nice day")
 
 
 def get_places():
+    """ """
     places = []
     in_file = open(FILENAME)
     for line in in_file:
@@ -40,14 +41,22 @@ def get_places():
         parts = line.split(",")
         parts[2] = int(parts[2])
         places.append(parts)
+    places.sort()
     in_file.close()
     return places
 
 
 def print_places(places):
     """     """
-    for i in places:
-        print("{}. {} in {} priority {}".format(i, places[0], places[1], places[2]))
+    for places_data in places:
+        if places_data[3] == "n":
+            unvisited = "*"
+            print("{}{}. {} in {} priority {}".format(unvisited, 1, places_data[0], places_data[1], places_data[2]))
+        else:
+            print("{}. {} in {} priority {}".format(1, places_data[0], places_data[1], places_data[2]))
+        # if places[3] == "n":
+            # unvisited += 1
+        # print("{} places. You still want to visit {} places.".format(len(list(places)), unvisited))
 
 
 if __name__ == '__main__':
