@@ -23,7 +23,8 @@ def main():
             places = get_places()
             print_places(places)
         elif choice == "A":
-            print("add")
+            places = get_valid_input()
+            add_place(places)
         elif choice == "M":
             print("mark")
         else:
@@ -39,7 +40,7 @@ def get_places():
     in_file = open(FILENAME)
     for line in in_file:
         line = line.strip()
-        parts = line.split(",")
+        parts = line.strip(",")
         parts[2] = int(parts[2])
         places.append(parts)
         places.sort(key=itemgetter(3, 2))
@@ -49,18 +50,46 @@ def get_places():
 
 def print_places(places):
     """     """
-    number = 0
     unvisited_places = []
-    for places_data in places:
+    for number, places_data in enumerate(places):
         if places_data[3] == "n":
             unvisited = "*"
-            number += 1
-            print("{:2}{}. {} in {} priority {}".format(unvisited, number, *places_data[:-1]))
+            print("{:2}{}. {:<5} in {} priority {}".format(unvisited, number+1, *places_data[:-1]))
             unvisited_places.append(unvisited)
         else:
-            number += 1
-            print("{:3}. {} in {} priority {}".format(number, *places_data[:-1]))
+            print("{:3}. {} in {} priority {}".format(number+1, *places_data[:-1]))
     print("{} places. You still need to visit {} places.".format(len(list(places)), len(unvisited_places)))
+
+
+def add_place(places):
+    """ """
+    name = get_valid_input()
+    country = get_valid_input()
+    priority = get_valid_input()
+    visited = "n"
+    new_place = [name, country, priority, visited]
+    places.append(new_place)
+
+
+def get_valid_input():
+    """ """
+    name = input("Name: ")
+    if name == "":
+        print("Input can not be blank")
+        name = input("Name: ")
+
+    country = input("Country: ")
+    if country == "":
+        print("Input can not be blank")
+        country = input("Country: ")
+
+    priority = int(input("Priority: "))
+    if priority < 0:
+        print("Number must be > 0")
+        priority = int(input("Priority: "))
+
+    print("{} in {} (priority {}) added to Travel Tracker".format(name, country, priority))
+    return name, country, priority
 
 
 if __name__ == '__main__':
