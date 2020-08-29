@@ -5,6 +5,7 @@ Date started: 24/08/2020
 GitHub URL:
 """
 
+from operator import itemgetter
 FILENAME = "places.csv"
 
 
@@ -41,25 +42,25 @@ def get_places():
         parts = line.split(",")
         parts[2] = int(parts[2])
         places.append(parts)
-        places.sort(key=take_forth)
+        places.sort(key=itemgetter(3, 2))
     in_file.close()
     return places
 
 
-def take_forth(elem):
-    """ """
-    return elem[3]
-
-
 def print_places(places):
     """     """
+    number = 0
+    unvisited_places = []
     for places_data in places:
         if places_data[3] == "n":
             unvisited = "*"
-            print("{:2}{}. {} in {} priority {}".format(unvisited, 1, *places_data[:-1]))
+            number += 1
+            print("{:2}{}. {} in {} priority {}".format(unvisited, number, *places_data[:-1]))
+            unvisited_places.append(unvisited)
         else:
-            print("{:3}. {} in {} priority {}".format(1, *places_data[:-1]))
-    print("{} places. You still need to visit {} places.".format(len(list(places)), 1))
+            number += 1
+            print("{:3}. {} in {} priority {}".format(number, *places_data[:-1]))
+    print("{} places. You still need to visit {} places.".format(len(list(places)), len(unvisited_places)))
 
 
 if __name__ == '__main__':
