@@ -40,7 +40,7 @@ def get_places():
     in_file = open(FILENAME)
     for line in in_file:
         line = line.strip()
-        parts = line.strip(",")
+        parts = line.split(",")
         parts[2] = int(parts[2])
         places.append(parts)
         places.sort(key=itemgetter(3, 2))
@@ -54,7 +54,7 @@ def print_places(places):
     for number, places_data in enumerate(places):
         if places_data[3] == "n":
             unvisited = "*"
-            print("{:2}{}. {:<5} in {} priority {}".format(unvisited, number+1, *places_data[:-1]))
+            print("{:2}{}. {} in {} priority {}".format(unvisited, number+1, *places_data[:-1]))
             unvisited_places.append(unvisited)
         else:
             print("{:3}. {} in {} priority {}".format(number+1, *places_data[:-1]))
@@ -66,7 +66,7 @@ def add_place(places):
     name = get_valid_input()
     country = get_valid_input()
     priority = get_valid_input()
-    visited = "n"
+    visited = get_valid_input()
     new_place = [name, country, priority, visited]
     places.append(new_place)
 
@@ -88,8 +88,27 @@ def get_valid_input():
         print("Number must be > 0")
         priority = int(input("Priority: "))
 
+    visited = "n"
+
     print("{} in {} (priority {}) added to Travel Tracker".format(name, country, priority))
-    return name, country, priority
+    return name, country, priority, visited
+
+
+def mark_visited(places):
+    """ """
+    item_to_change = int(input("Enter the number of the place you want to change: "))
+    if item_to_change < 0:
+        print("Number must be > 0")
+        item_to_change = int(input("Enter the number of the place you want to change: "))
+    elif item_to_change > len(places):
+        print("Invalid place number")
+        item_to_change = int(input("Enter the number of the place you want to change: "))
+    elif item_to_change == places[2]:
+        print("That place is already visited")
+        item_to_change = int(input("Enter the number of the place you want to change: "))
+    else:
+        places[item_to_change - 1][3] = "v"
+    places.append(item_to_change)
 
 
 if __name__ == '__main__':
