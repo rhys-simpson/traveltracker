@@ -26,7 +26,8 @@ def main():
             places = get_valid_input()
             add_place(places)
         elif choice == "M":
-            print("mark")
+            places = get_places()
+            mark_visited(places)
         else:
             print("Invalid Menu Choice")
         print(menu)
@@ -103,7 +104,7 @@ def mark_visited(places):
     elif item_to_change > len(places):
         print("Invalid place number")
         item_to_change = int(input("Enter the number of the place you want to change: "))
-    elif item_to_change == places[2]:
+    elif item_to_change == places[0][2]:
         print("That place is already visited")
         item_to_change = int(input("Enter the number of the place you want to change: "))
     else:
