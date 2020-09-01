@@ -1,4 +1,4 @@
-"""
+""""
 Replace the contents of this module docstring with your own details
 Name: Rhys Simpson
 Date started: 24/08/2020
@@ -50,16 +50,41 @@ def get_places():
 
 
 def print_places(places):
-    """     """
+    """ """
+
+    longest_country_name_length, longest_number_length, longest_town_name_length = longest_elem_length(places)
+
     unvisited_places = []
     for number, places_data in enumerate(places):
         if places_data[3] == "n":
             unvisited = "*"
-            print("{:2}{}. {} in {} priority {}".format(unvisited, number+1, *places_data[:-1]))
-            unvisited_places.append(unvisited)
         else:
-            print("{:3}. {} in {} priority {}".format(number+1, *places_data[:-1]))
-    print("{} places. You still need to visit {} places.".format(len(list(places)), len(unvisited_places)))
+            unvisited = ""
+            unvisited_places.append(unvisited)
+        print("{:1}{}. {:<{}} in {:<{}} priority {:>{}}".format(unvisited, number+1, places_data[0],
+                                                                longest_town_name_length, places_data[1],
+                                                                longest_country_name_length, places_data[2],
+                                                                longest_number_length))
+
+
+def longest_elem_length(places):
+    """ """
+    longest_town_name_length = 0
+    longest_town_name = [places_data[0] for places_data in places if len(places_data) > longest_town_name_length]
+    for word in longest_town_name:
+        if len(word) > longest_town_name_length:
+            longest_town_name_length = len(word)
+    longest_country_name_length = 0
+    longest_country_name = [places_data[1] for places_data in places if len(places_data) > longest_country_name_length]
+    for word in longest_country_name:
+        if len(word) > longest_country_name_length:
+            longest_country_name_length = len(word)
+    longest_number_length = 0
+    longest_number = [places_data[2] for places_data in places if len(places_data) > longest_number_length]
+    for word in longest_number:
+        if len(str(word)) > longest_number_length:
+            longest_number_length = len(str(word))
+    return longest_country_name_length, longest_number_length, longest_town_name_length
 
 
 def add_place(places):
@@ -101,7 +126,7 @@ def mark_visited(places):
     if item_to_change < 0:
         print("Number must be > 0")
         item_to_change = int(input("Enter the number of the place you want to change: "))
-    elif item_to_change > len(places):
+    elif item_to_change > places[2]:
         print("Invalid place number")
         item_to_change = int(input("Enter the number of the place you want to change: "))
     elif item_to_change == places[2]:
