@@ -58,13 +58,14 @@ def print_places(places):
     for number, places_data in enumerate(places):
         if places_data[3] == "n":
             unvisited = "*"
+            unvisited_places.append(unvisited)
         else:
             unvisited = ""
-            unvisited_places.append(unvisited)
         print("{:1}{}. {:<{}} in {:<{}} priority {:>{}}".format(unvisited, number+1, places_data[0],
                                                                 longest_town_name_length, places_data[1],
                                                                 longest_country_name_length, places_data[2],
                                                                 longest_number_length))
+    print("{} places. You still want to visit {} places.".format(len(list(places)), len(list(unvisited_places))))
 
 
 def longest_elem_length(places):
@@ -122,19 +123,23 @@ def get_valid_input():
 
 def mark_visited(places):
     """ """
-    item_to_change = int(input("Enter the number of the place you want to change: "))
-    if item_to_change < 0:
-        print("Number must be > 0")
-        item_to_change = int(input("Enter the number of the place you want to change: "))
-    elif item_to_change > places[2]:
-        print("Invalid place number")
-        item_to_change = int(input("Enter the number of the place you want to change: "))
-    elif item_to_change == places[2]:
-        print("That place is already visited")
-        item_to_change = int(input("Enter the number of the place you want to change: "))
-    else:
-        places[item_to_change - 1][3] = "v"
-    places.append(item_to_change)
+    print("Enter the number of a place to mark as visited")
+    finished = False
+    while not finished:
+        try:
+            item_to_change = int(input(">>> "))
+            if item_to_change < 0:
+                print("Number must be > 0")
+            elif item_to_change > len(list(places)):
+                print("Invalid place number")
+            elif places[item_to_change - 1][3] == "v":
+                print("That place is already visited")
+            else:
+                finished = True
+                places[item_to_change - 1][3] = "v"
+                print("{} in {} visited!".format(places[item_to_change - 1][0], places[item_to_change - 1][1]))
+        except ValueError:
+            print("Invalid input; enter a valid number")
 
 
 if __name__ == '__main__':
