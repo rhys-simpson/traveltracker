@@ -17,13 +17,13 @@ def main():
     print("{} places loaded from places.csv".format(number))
     menu = "Menu:\nL - List Places\nA - Add new place\nM - Mark a place as visited\nQ - Quit"
     print(menu)
-    choice = input(">>>").upper()
+    choice = input(">>> ").upper()
     while choice != "Q":
         if choice == "L":
             places = get_places()
             print_places(places)
         elif choice == "A":
-            places = get_valid_input()
+            places = get_places()
             add_place(places)
         elif choice == "M":
             places = get_places()
@@ -31,7 +31,7 @@ def main():
         else:
             print("Invalid Menu Choice")
         print(menu)
-        choice = input(">>>").upper()
+        choice = input(">>> ").upper()
     print("Have a nice day")
 
 
@@ -70,21 +70,9 @@ def print_places(places):
 
 def longest_elem_length(places):
     """ """
-    longest_town_name_length = 0
-    longest_town_name = [places_data[0] for places_data in places if len(places_data) > longest_town_name_length]
-    for word in longest_town_name:
-        if len(word) > longest_town_name_length:
-            longest_town_name_length = len(word)
-    longest_country_name_length = 0
-    longest_country_name = [places_data[1] for places_data in places if len(places_data) > longest_country_name_length]
-    for word in longest_country_name:
-        if len(word) > longest_country_name_length:
-            longest_country_name_length = len(word)
-    longest_number_length = 0
-    longest_number = [places_data[2] for places_data in places if len(places_data) > longest_number_length]
-    for word in longest_number:
-        if len(str(word)) > longest_number_length:
-            longest_number_length = len(str(word))
+    longest_town_name_length = max(len(places_data[0]) for places_data in places)
+    longest_country_name_length = max(len(places_data[1]) for places_data in places)
+    longest_number_length = max(len(str(places_data[2])) for places_data in places)
     return longest_country_name_length, longest_number_length, longest_town_name_length
 
 
@@ -101,9 +89,11 @@ def add_place(places):
 def get_valid_input():
     """ """
     name = input("Name: ")
-    if name == "":
-        print("Input can not be blank")
+    while name != "":
         name = input("Name: ")
+    else:
+        print("Input can not be blank")
+    name = input("Name: ")
 
     country = input("Country: ")
     if country == "":
