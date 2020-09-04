@@ -12,15 +12,7 @@ FILENAME = "places.csv"
 def main():
     """ """
     print("Travel Tracker 1.0 - by Rhys Simpson")
-    places = []
-    in_file = open(FILENAME, "r")
-    for line in in_file:
-        line = line.strip()
-        parts = line.split(",")
-        parts[2] = int(parts[2])
-        places.append(parts)
-        places.sort(key=itemgetter(3, 2))
-    in_file.close()
+    places = get_places()
     number = len(list(places))
     print("{} places loaded from places.csv".format(number))
     menu = "Menu:\nL - List Places\nA - Add new place\nM - Mark a place as visited\nQ - Quit"
@@ -40,6 +32,20 @@ def main():
     print("Have a nice day")
 
 
+def get_places():
+    places = []
+    in_file = open(FILENAME, "r")
+    for line in in_file:
+        line = line.strip()
+        parts = line.split(",")
+        parts[2] = int(parts[2])
+        places.append(parts)
+        places.sort(key=itemgetter(3, 2))
+    in_file.close()
+    return places
+
+
+# TODO sort by unvisited, add print statement (.. places. No places left to visit. Why not add a new place?)
 def print_places(places):
     """ """
 
@@ -67,6 +73,7 @@ def longest_elem_length(places):
     return longest_country_name_length, longest_number_length, longest_town_name_length
 
 
+# TODO fix so doesnt continuously loop
 def add_place(places):
     """ """
     name = get_valid_input()
@@ -77,6 +84,7 @@ def add_place(places):
     places.append(new_place)
 
 
+# TODO fix so doesnt continuously loop
 def get_valid_input():
     """ """
     name = input("Name: ")
@@ -102,6 +110,7 @@ def get_valid_input():
             print("Invalid input; enter a valid number")
 
 
+# TODO add print statement for when no unvisited places (sample output)
 def mark_visited(places):
     """ """
     print("Enter the number of a place to mark as visited")
@@ -115,6 +124,7 @@ def mark_visited(places):
                 print("Invalid place number")
             elif places[item_to_change - 1][3] == "v":
                 print("That place is already visited")
+                break
             else:
                 finished = True
                 places[item_to_change - 1][3] = "v"
