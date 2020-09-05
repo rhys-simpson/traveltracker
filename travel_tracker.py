@@ -7,6 +7,7 @@ GitHub URL:
 
 from operator import itemgetter
 FILENAME = "places.csv"
+VISITED = 3
 
 
 def main():
@@ -29,7 +30,17 @@ def main():
             print("Invalid Menu Choice")
         print(menu)
         choice = input(">>> ").upper()
+        # TODO add quit function
     print("Have a nice day")
+
+
+# added visited function for print statements
+def change_visited_number(places):
+    visit = VISITED
+    for places_data in places:
+        if places_data[3] == "v":
+            visit -= 1
+    return visit
 
 
 def get_places():
@@ -45,7 +56,7 @@ def get_places():
     return places
 
 
-# TODO sort by unvisited, add print statement (.. places. No places left to visit. Why not add a new place?)
+# TODO sort by unvisited (not done)
 def print_places(places):
     """ """
 
@@ -58,11 +69,15 @@ def print_places(places):
             unvisited_places.append(unvisited)
         else:
             unvisited = ""
+        places.sort(key=itemgetter(3, 2))
         print("{:1}{}. {:<{}} in {:<{}} priority {:>{}}".format(unvisited, number+1, places_data[0],
                                                                 longest_town_name_length, places_data[1],
                                                                 longest_country_name_length, places_data[2],
                                                                 longest_number_length))
-    print("{} places. You still want to visit {} places.".format(len(list(places)), len(list(unvisited_places))))
+    if not unvisited_places:
+        print("{} places. No places left to visit. Why not add a new place?".format(len(list(places))))
+    else:
+        print("{} places. You still want to visit {} places.".format(len(list(places)), len(list(unvisited_places))))
 
 
 def longest_elem_length(places):
@@ -73,20 +88,20 @@ def longest_elem_length(places):
     return longest_country_name_length, longest_number_length, longest_town_name_length
 
 
-# TODO fix so doesnt continuously loop
+# TODO - fix as sometimes when first adding a place it repeats first line of csv file then updates after list option is
+# TODO reselected
 def add_place(places):
     """ """
-    name = get_valid_input()
-    country = get_valid_input()
-    priority = get_valid_input()
-    visited = get_valid_input()
-    new_place = [name, country, priority, visited]
+    name, country, priority = get_valid_input()
+    visit = change_visited_number(places)
+    visit += 1
+    new_place = [name, country, priority, "n"]
     places.append(new_place)
 
 
-# TODO fix so doesnt continuously loop
 def get_valid_input():
     """ """
+    finished = False
     name = input("Name: ")
     while name == "":
         print("Input can not be blank")
@@ -95,27 +110,31 @@ def get_valid_input():
     while country == "":
         print("Input can not be blank")
         country = input("Country: ")
-    finished = False
     while not finished:
         try:
             priority = int(input("Priority: "))
             while priority < 0:
                 print("Number must be > 0")
                 priority = int(input("Priority: "))
-            finished = True
-            VISITED = "n"
-            print("{} in {} (priority {}) added to Travel Tracker".format(name, country, priority))
-            return name, country, priority, VISITED
+            else:
+                finished = True
+                print("{} in {} (priority {}) added to Travel Tracker".format(name, country, priority))
+                return name, country, priority
         except ValueError:
             print("Invalid input; enter a valid number")
 
 
-# TODO add print statement for when no unvisited places (sample output)
 def mark_visited(places):
     """ """
-    print("Enter the number of a place to mark as visited")
     finished = False
+    visit = change_visited_number(places)
+    if visit <= 0:
+        print("No unvisited places")
+        finished = True
+
     while not finished:
+        print_places(places)
+        print("Enter the number of a place to mark as visited")
         try:
             item_to_change = int(input(">>> "))
             if item_to_change < 0:
@@ -131,6 +150,11 @@ def mark_visited(places):
                 print("{} in {} visited!".format(places[item_to_change - 1][0], places[item_to_change - 1][1]))
         except ValueError:
             print("Invalid input; enter a valid number")
+
+
+"""
+def quit():
+"""
 
 
 if __name__ == '__main__':
