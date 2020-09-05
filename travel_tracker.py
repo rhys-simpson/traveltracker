@@ -30,7 +30,7 @@ def main():
             print("Invalid Menu Choice")
         print(menu)
         choice = input(">>> ").upper()
-        # TODO add quit function
+    save_places(places)
     print("Have a nice day")
 
 
@@ -152,9 +152,12 @@ def mark_visited(places):
             print("Invalid input; enter a valid number")
 
 
-"""
-def quit():
-"""
+def save_places(places):
+    """ """
+    out_file = open("places.csv", "w")
+    for places_data in places:
+        print("{},{},{},{}".format(places_data[0], places_data[1], places_data[2], places_data[3]), file=out_file)
+    out_file.close()
 
 
 if __name__ == '__main__':
