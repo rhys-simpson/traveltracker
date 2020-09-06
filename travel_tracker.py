@@ -1,15 +1,14 @@
 """"
-Replace the contents of this module docstring with your own details
 Name: Rhys Simpson
-Date started: 24/08/2020
-GitHub URL:
+Date started: 27/08/2020
+GitHub URL: https://github.com/rhys-simpson/traveltracker
 """
 
 from operator import itemgetter
 FILENAME = "places.csv"
-VISITED = 3
 
 
+# TODO add print statements; formatting etc. to match sample output
 def main():
     """ """
     print("Travel Tracker 1.0 - by Rhys Simpson")
@@ -31,15 +30,13 @@ def main():
         print(menu)
         choice = input(">>> ").upper()
     save_places(places)
-    print("Have a nice day")
 
 
-# added visited function for print statements
 def change_visited_number(places):
-    visit = VISITED
+    visit = 0
     for places_data in places:
-        if places_data[3] == "v":
-            visit -= 1
+        if places_data[3] == "n":
+            visit += 1
     return visit
 
 
@@ -51,33 +48,31 @@ def get_places():
         parts = line.split(",")
         parts[2] = int(parts[2])
         places.append(parts)
-        places.sort(key=itemgetter(3, 2))
+    places.sort(key=itemgetter(3, 2))
     in_file.close()
     return places
 
 
-# TODO sort by unvisited (not done)
 def print_places(places):
     """ """
 
     longest_country_name_length, longest_number_length, longest_town_name_length = longest_elem_length(places)
 
-    unvisited_places = []
+    visit = change_visited_number(places)
+    places.sort(key=itemgetter(3, 2))
     for number, places_data in enumerate(places):
-        if places_data[3] == "n":
-            unvisited = "*"
-            unvisited_places.append(unvisited)
-        else:
+        if places_data[3] == "v":
             unvisited = ""
-        places.sort(key=itemgetter(3, 2))
+        else:
+            unvisited = "*"
         print("{:1}{}. {:<{}} in {:<{}} priority {:>{}}".format(unvisited, number+1, places_data[0],
                                                                 longest_town_name_length, places_data[1],
                                                                 longest_country_name_length, places_data[2],
                                                                 longest_number_length))
-    if not unvisited_places:
+    if visit <= 0:
         print("{} places. No places left to visit. Why not add a new place?".format(len(list(places))))
     else:
-        print("{} places. You still want to visit {} places.".format(len(list(places)), len(list(unvisited_places))))
+        print("{} places. You still want to visit {} places.".format(len(list(places)), visit))
 
 
 def longest_elem_length(places):
@@ -88,13 +83,9 @@ def longest_elem_length(places):
     return longest_country_name_length, longest_number_length, longest_town_name_length
 
 
-# TODO - fix as sometimes when first adding a place it repeats first line of csv file then updates after list option is
-# TODO reselected
 def add_place(places):
     """ """
     name, country, priority = get_valid_input()
-    visit = change_visited_number(places)
-    visit += 1
     new_place = [name, country, priority, "n"]
     places.append(new_place)
 
@@ -128,7 +119,7 @@ def mark_visited(places):
     """ """
     finished = False
     visit = change_visited_number(places)
-    if visit <= 0:
+    if visit == 0:
         print("No unvisited places")
         finished = True
 
@@ -158,6 +149,8 @@ def save_places(places):
     for places_data in places:
         print("{},{},{},{}".format(places_data[0], places_data[1], places_data[2], places_data[3]), file=out_file)
     out_file.close()
+    print("{} places saved to places.csv".format(len(list(places))))
+    print("Have a nice day :)")
 
 
 if __name__ == '__main__':
